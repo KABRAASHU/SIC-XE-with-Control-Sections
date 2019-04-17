@@ -22,7 +22,7 @@ string first_word(string s)
         i++;
     }
     if(i!=s.length())
-        return s.substring(0,i);
+        return s.substr(0,i);
     else
         return s;
 }
@@ -43,9 +43,9 @@ string second_word(string s)
         j++;
     }
     if(j!=s.length())
-        return s.substring(i+1,j);
+        return s.substr(i+1,j);
     else
-        return s.substring(i+1);
+        return s.substr(i+1);
 }
 string third_word(string s)
 {
@@ -68,9 +68,9 @@ string third_word(string s)
         j++;
     }
     if(j!=s.length())
-        return s.substring(i+1,j);
+        return s.substr(i+1,j);
     else
-        return s.substring(i+1);
+        return s.substr(i+1);
 }
 int convert_to_int(string s)
 {
@@ -88,7 +88,7 @@ int convert_to_int(string s)
 void pass1()
 {
     map<string,pair<string,int>>OT;
-    map<strng,int>LT;
+    map<string,int>LT;
     //Defining OPTAB 
     fstream INSfile;
     INSfile.open("Optab.txt");
@@ -112,10 +112,11 @@ void pass1()
     PRGfile.open("Input.txt");
     INTER_file.open("Intermediatefile.txt");
     Label_file.open("Label.txt");
-    string prog_name,start,start_addr;
+    string prog_name,start,start_addr,str="START",ext="EXTDEF",exr="EXTREF",sect="CSECT";
+    string resb="RESB",resw="RESW",wrd="WORD";
     PRGfile>>prog_name>>start>>start_addr;
     int add=0;
-    if(strcmp(start,"START"))
+    if(strcmp(start.c_str(),str.c_str())==0)
     {
         while(!PRGfile.eof())
         {
@@ -127,17 +128,17 @@ void pass1()
                 INTER_file<<line<<endl;
                 continue;
             }
-            if(strcmp(first_word(line),"EXTDEF")==0)
+            if(strcmp(first_word(line).c_str(),ext.c_str())==0)
             {
                 INTER_file<<line<<endl;
                 continue;
             }
-            if(strcmp(first_word(line),"EXTREF")==0)
+            if(strcmp(first_word(line).c_str(),exr.c_str())==0)
             {
                 INTER_file<<line<<endl;
                 continue;
             }
-            if(strcmp(second_word(line),"CSECT")==0)
+            if(strcmp(second_word(line).c_str(),sect.c_str())==0)
             {
                 INTER_file<<line<<endl;
                 add=0;
@@ -194,17 +195,17 @@ void pass1()
                     else
                         add += OT[opcode].second;
                 }
-                else if(strcmp(opcode,"RESB")==0)
+                else if(strcmp(opcode.c_str(),resb.c_str())==0)
                 {
                     length_of_word = third_word(line);
                     add +=  convert_to_int(length_of_word);
                 }
-                else if(strcmp(opcode,"RESW")==0)
+                else if(strcmp(opcode.c_str(),resw.c_str())==0)
                 {
                     length_of_word = third_word(line);
                     add +=3 * convert_to_int(length_of_word);
                 }
-                else if(strcmp(opcode,"WORD")==0)
+                else if(strcmp(opcode.c_str(),wrd.c_str())==0)
                 {
                     length_of_word = third_word(line);
                     add +=3 * convert_to_int(length_of_word);
