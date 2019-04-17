@@ -94,9 +94,13 @@ void pass1()
     INSfile.open("Optab.txt");
     while(!INSfile.eof())
     {
-        string ins,oc;
+        string ins,oc,ln,len;
         int length;
-        INSfile>>ins>>oc>>length;
+        getline(INSfile,ln);
+        ins = first_word(ln);
+        oc = second_word(ln);
+        len= third_word(ln);
+        length = convert_to_int(len);
         OT[ins]=make_pair(oc,length);
     }
     INSfile.close();
@@ -226,7 +230,5 @@ void pass1()
 int main()
 {
     pass1();
-    if(ERROR==0)
-        pass2();
     return 0;
 }
