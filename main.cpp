@@ -1,4 +1,8 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include<map>
+#include<fstream>
+#include<string.h>
+#include<string>
 using namespace std;
 int ERROR=0;
 int NO_OF_WORDS(string s)
@@ -21,7 +25,7 @@ string first_word(string s)
         break;
         i++;
     }
-    if(i!=s.length())
+    if(i<s.length())
         return s.substr(0,i);
     else
         return s;
@@ -42,7 +46,7 @@ string second_word(string s)
             break;
         j++;
     }
-    if(j!=s.length())
+    if(j<s.length())
         return s.substr(i+1,j);
     else
         return s.substr(i+1);
@@ -55,7 +59,7 @@ string third_word(string s)
         if(s.at(i) == ' ')
         {
             k--;
-            if(k<0)
+            if(k==0)
                 break;
         }
         i++;
@@ -67,7 +71,7 @@ string third_word(string s)
             break;
         j++;
     }
-    if(j!=s.length())
+    if(j < s.length())
         return s.substr(i+1,j);
     else
         return s.substr(i+1);
@@ -91,19 +95,24 @@ void pass1()
     map<string,int>LT;
     //Defining OPTAB 
     fstream INSfile;
-    INSfile.open("Optab.txt");
-    while(!INSfile.eof())
+    INSfile.open("Optab.txt",ios::in);
+    if(!INSfile)
     {
-        string ins,oc,ln,len;
-        int length;
-        getline(INSfile,ln);
-        ins = first_word(ln);
-        oc = second_word(ln);
-        len= third_word(ln);
-        length = convert_to_int(len);
-        OT[ins]=make_pair(oc,length);
+        cout<<"ERROR:file cannot be opened"<<endl;
+        ERROR=1;
+        return;
     }
-    INSfile.close();
+    else
+    {
+        while(!INSfile.eof())
+        {
+            string ins,oc;
+            int length;
+            INSfile>>ins>>oc>>length;
+            OT[ins]=make_pair(oc,length);
+        }
+        INSfile.close();
+    }
     //OPTAB Defined and can be used as OT["LDA"].first
     //for respective object code and OT["LDA"].second
     //for length of instruction
@@ -113,19 +122,21 @@ void pass1()
     fstream PRGfile;
     fstream INTER_file;
     fstream Label_file;
-    PRGfile.open("Input.txt");
-    INTER_file.open("Intermediatefile.txt");
-    Label_file.open("Label.txt");
+    PRGfile.open("Input.txt",ios::in);
+    INTER_file.open("Intermediatefile.txt",ios::out);
+    Label_file.open("Label.txt",ios::out);
     string prog_name,start,start_addr,str="START",ext="EXTDEF",exr="EXTREF",sect="CSECT";
     string resb="RESB",resw="RESW",wrd="WORD";
     PRGfile>>prog_name>>start>>start_addr;
+    PRGfile.ignore();
     int add=0;
+    INTER_file<<prog_name<<" "<<start<<" "<<start_addr<<" "<<0<<endl;
     if(strcmp(start.c_str(),str.c_str())==0)
     {
         while(!PRGfile.eof())
         {
             string line,opcode,label,length_of_word;
-            getline (PRGfile , line);
+            getline(PRGfile,line);
             int n=NO_OF_WORDS(line);
             if(line.at(0)=='.')
             {
@@ -230,5 +241,7 @@ void pass1()
 int main()
 {
     pass1();
+    if(ERROR == 0)
+//        pass2();
     return 0;
 }
