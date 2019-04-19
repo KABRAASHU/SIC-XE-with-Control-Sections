@@ -126,7 +126,7 @@ void pass1()
     INTER_file.open("Intermediatefile.txt",ios::out);
     Label_file.open("Label.txt",ios::out);
     string prog_name,start,start_addr,str="START",ext="EXTDEF",exr="EXTREF",sect="CSECT";
-    string resb="RESB",resw="RESW",wrd="WORD";
+    string resb="RESB",resw="RESW",wrd="WORD",byte="BYTE";
     PRGfile>>prog_name>>start>>start_addr;
     PRGfile.ignore();
     int add=0;
@@ -145,17 +145,17 @@ void pass1()
             }
             if(strcmp(first_word(line).c_str(),ext.c_str())==0)
             {
-                INTER_file<<line<<endl;
+                INTER_file<<line<<" "<<add<<endl;
                 continue;
             }
             if(strcmp(first_word(line).c_str(),exr.c_str())==0)
             {
-                INTER_file<<line<<endl;
+                INTER_file<<line<<" "<<add<<endl;
                 continue;
             }
             if(strcmp(second_word(line).c_str(),sect.c_str())==0)
             {
-                INTER_file<<line<<endl;
+                INTER_file<<line<<" "<<add<<endl;
                 add=0;
                 continue;
             }
@@ -209,6 +209,10 @@ void pass1()
                         add += 4;
                     else
                         add += OT[opcode].second;
+                }
+                else if(strcmp(opcode.c_str(),byte.c_str())==0)
+                {
+                    add+=3;
                 }
                 else if(strcmp(opcode.c_str(),resb.c_str())==0)
                 {
