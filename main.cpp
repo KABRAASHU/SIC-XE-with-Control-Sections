@@ -39,17 +39,17 @@ string second_word(string s)
             break;
         i++;
     }
-    j=i;
-    while(j < s.length())
+    j=1;
+    while(j < s.length()-i)
     {
-        if(s.at(j) == ' ')
+        if(s.at(j+i) == ' ')
             break;
         j++;
     }
-    if(j<s.length())
-        return s.substr(i+1,j);
+    if(j<s.length()-i)
+        return s.substr(i+1,j-1);
     else
-        return s.substr(i+1);
+        return s.substr(i+1,s.length()-i-1);
 }
 string third_word(string s)
 {
@@ -64,17 +64,17 @@ string third_word(string s)
         }
         i++;
     }
-    j=i;
-    while(j < s.length())
+    j=1;
+    while(j < s.length()-i)
     {
-        if(s.at(j) == ' ')
+        if(s.at(i+j) == ' ')
             break;
         j++;
     }
-    if(j < s.length())
-        return s.substr(i+1,j);
+    if(j < s.length()-i)
+        return s.substr(i+1,j-1);
     else
-        return s.substr(i+1);
+        return s.substr(i+1,s.length()-i-1);
 }
 int convert_to_int(string s)
 {
